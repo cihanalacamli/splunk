@@ -1,436 +1,831 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Splunk Partner Activation Kit | Ingram Micro</title>
-  <style>
-    :root{
-      --orange:#ff5f1f; --pink:#ff2f7d; --blue:#0076ce; --cyan:#00a0d2;
-      --ink:#071827; --text:#1f2937; --muted:#667085; --line:#e6edf5;
-      --soft:#f6f8fb; --card:#ffffff; --shadow:0 24px 70px rgba(7,24,39,.12);
-    }
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{
-      margin:0;
-      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color:var(--text);
-      background:
-        radial-gradient(circle at 8% 0%, rgba(255,95,31,.16), transparent 30%),
-        radial-gradient(circle at 90% 8%, rgba(0,160,210,.16), transparent 30%),
-        linear-gradient(180deg,#fff 0%,#f7f9fc 46%,#eef4fa 100%);
-    }
-    a{color:inherit;text-decoration:none}
-    .shell{width:min(1160px,92vw);margin:0 auto}
-    .nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.82);backdrop-filter:blur(16px);border-bottom:1px solid rgba(230,237,245,.9)}
-    .nav-inner{height:72px;display:flex;align-items:center;justify-content:space-between;gap:24px}
-    .brand{display:flex;align-items:center;gap:12px;font-weight:900;letter-spacing:-.04em;color:var(--ink)}
-    .brand-stack{align-items:center}
-    .brand-copy{display:flex;flex-direction:column;gap:2px;line-height:1.05}
-    .brand-copy small{font-size:11px;font-weight:750;letter-spacing:0;color:#667085}
-    .brand-mark{width:38px;height:38px;border-radius:14px;background:linear-gradient(135deg,var(--orange),var(--pink) 52%,var(--blue));box-shadow:0 14px 36px rgba(255,95,31,.25)}
-    .nav-links{display:flex;gap:18px;font-size:14px;font-weight:750;color:#475467}
-    .nav-links a:hover{color:var(--orange)}
-    .nav-cta{padding:12px 17px;border-radius:999px;background:var(--ink);color:white;font-weight:850;box-shadow:0 12px 34px rgba(7,24,39,.22)}
-    .hero{padding:82px 0 54px}
-    .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:center}
-    .eyebrow{display:inline-flex;align-items:center;gap:9px;padding:9px 13px;border-radius:999px;background:white;border:1px solid var(--line);box-shadow:0 12px 30px rgba(7,24,39,.05);font-size:13px;font-weight:800;color:#475467}
-    .dot{width:9px;height:9px;border-radius:999px;background:var(--orange);box-shadow:0 0 0 6px rgba(255,95,31,.13)}
-    h1{font-size:clamp(44px,6vw,78px);line-height:.96;letter-spacing:-.075em;margin:22px 0 18px;color:var(--ink)}
-    .grad{background:linear-gradient(95deg,var(--orange),var(--pink),var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent}
-    .lead{font-size:20px;line-height:1.55;color:#475467;max-width:690px;margin:0 0 26px}
-    .hero-actions{display:flex;gap:12px;flex-wrap:wrap}
-    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 18px;border-radius:16px;font-size:15px;font-weight:900;border:1px solid transparent;cursor:pointer;transition:.2s transform,.2s box-shadow,.2s border-color}
-    .btn:hover{transform:translateY(-2px)}
-    .btn-primary{background:linear-gradient(135deg,var(--orange),var(--pink));color:white;box-shadow:0 18px 42px rgba(255,95,31,.27)}
-    .btn-secondary{background:white;color:var(--ink);border-color:var(--line)}
-    .hero-card{background:rgba(255,255,255,.82);border:1px solid rgba(255,255,255,.9);border-radius:36px;padding:28px;box-shadow:var(--shadow);position:relative;overflow:hidden}
-    .hero-card:before{content:"";position:absolute;right:-90px;top:-90px;width:250px;height:250px;border-radius:50%;background:radial-gradient(circle,var(--cyan),transparent 65%);opacity:.24}
-    .status{position:relative;display:grid;gap:14px}
-    .status-row{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;padding:16px;background:white;border:1px solid var(--line);border-radius:22px}
-    .status-num{width:42px;height:42px;border-radius:15px;background:linear-gradient(135deg,var(--orange),var(--blue));display:grid;place-items:center;color:white;font-weight:950}
-    .status-row b{display:block;color:var(--ink);font-size:16px;letter-spacing:-.025em;margin-bottom:4px}
-    .status-row span{display:block;color:var(--muted);font-size:13px;line-height:1.45}
-    .section{padding:48px 0}
-    .section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:22px}
-    h2{font-size:clamp(30px,4vw,50px);line-height:1;letter-spacing:-.06em;margin:0;color:var(--ink)}
-    .sub{font-size:16px;line-height:1.55;color:var(--muted);max-width:650px;margin:0}
-    .outcome-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-    .outcome{background:white;border:1px solid var(--line);border-radius:24px;padding:20px;box-shadow:0 14px 40px rgba(7,24,39,.06)}
-    .outcome b{display:block;color:var(--ink);font-size:17px;letter-spacing:-.03em;margin-bottom:8px}
-    .outcome span{display:block;color:var(--muted);font-size:13px;line-height:1.5}
-    .journey{display:grid;gap:18px}
-    .step{background:white;border:1px solid var(--line);border-radius:30px;padding:24px;box-shadow:0 18px 52px rgba(7,24,39,.07);cursor:pointer;transition:.2s border-color,.2s box-shadow}
-    .step:hover{border-color:rgba(255,95,31,.35);box-shadow:0 22px 60px rgba(7,24,39,.10)}
-    .step-content{display:none;margin-top:18px}
-    .step.open .step-content{display:block}
-    .chevron{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:12px;background:#f7f9fc;border:1px solid var(--line);color:#667085;font-weight:950;transition:.2s transform,.2s color,.2s background}
-    .step.open .chevron{transform:rotate(180deg);color:var(--orange);background:#fff5ef}
-    .step-top{display:grid;grid-template-columns:96px 1fr auto;gap:18px;align-items:start;margin-bottom:0}
-    .step-label{display:inline-flex;align-items:center;justify-content:center;height:44px;border-radius:16px;background:linear-gradient(135deg,var(--orange),var(--blue));color:white;font-weight:950;font-size:13px;letter-spacing:.04em}
-    .step h3{margin:0 0 7px;font-size:25px;line-height:1.1;letter-spacing:-.045em;color:var(--ink)}
-    .step p{margin:0;color:var(--muted);line-height:1.55}
-    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-    .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-    .mini-card,.domain-card,.resource-card{background:#fbfcfe;border:1px solid var(--line);border-radius:22px;padding:17px;min-height:136px}
-    .mini-card b,.domain-card b,.resource-card b{display:block;color:var(--ink);font-size:16px;letter-spacing:-.03em;margin-bottom:7px}
-    .mini-card span,.domain-card span,.resource-card span{display:block;color:var(--muted);font-size:13px;line-height:1.48}
-    .domain-card{background:white;transition:.2s transform,.2s box-shadow,.2s border-color}
-    .domain-card:hover{transform:translateY(-3px);box-shadow:0 20px 48px rgba(7,24,39,.1);border-color:rgba(255,95,31,.35)}
-    .card-kicker{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border-radius:999px;background:#fff5ef;border:1px solid #ffd8c8;color:#c94712;font-size:12px;font-weight:900;margin-bottom:12px}
-    .link-pill{display:inline-flex;align-items:center;gap:7px;margin-top:13px;color:#005f9e;font-weight:900;font-size:13px;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:4px}
-    .link-pill:after{content:"↗";font-size:12px;text-decoration:none}
-.brand-stack{
-  display:flex;
-  flex-direction:column;
-  align-items:flex-start;
-  gap:3px;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Ingram Micro Türkiye Splunk Growth Hub — partner activation, customer use cases, Cisco + Splunk integrations, training and resources.">
+<title>Splunk Growth Hub | Ingram Micro Türkiye</title>
+<style>
+:root{
+  --splunk-orange:#ff5f1f;
+  --splunk-pink:#e7378c;
+  --ingram-blue:#0076ce;
+  --cisco-blue:#00a0d2;
+  --ink:#0b1f33;
+  --text:#344054;
+  --muted:#667085;
+  --soft:#f6f9fd;
+  --card:#ffffff;
+  --line:#e6edf5;
+  --dark:#061827;
+  --dark2:#0b2b43;
+  --green:#18a874;
+  --yellow:#f7b731;
+  --shadow:0 26px 72px rgba(8,28,49,.12);
+  --shadow-soft:0 15px 42px rgba(8,28,49,.07);
+  --radius:30px;
 }
-
-.brand-main{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  font-weight:900;
-  letter-spacing:-.04em;
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   color:var(--ink);
+  background:
+    radial-gradient(circle at 7% 4%,rgba(255,95,31,.14),transparent 27%),
+    radial-gradient(circle at 94% 5%,rgba(0,160,210,.14),transparent 29%),
+    linear-gradient(180deg,#fff 0%,#f7fafd 49%,#eef5fb 100%);
+}
+a{color:inherit;text-decoration:none}
+button{font:inherit}
+.shell{width:min(1180px,92vw);margin:auto}
+.nav{
+  position:sticky;top:0;z-index:80;
+  backdrop-filter:blur(20px);
+  background:rgba(255,255,255,.82);
+  border-bottom:1px solid rgba(230,237,245,.9)
+}
+.nav-inner{height:74px;display:flex;align-items:center;justify-content:space-between;gap:22px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:950;letter-spacing:-.04em}
+.brand-mark{
+  width:41px;height:41px;border-radius:14px;
+  background:linear-gradient(135deg,var(--splunk-orange),var(--splunk-pink) 45%,var(--ingram-blue));
+  box-shadow:0 14px 34px rgba(255,95,31,.24);
+  position:relative;overflow:hidden
+}
+.brand-mark:after{content:">";position:absolute;inset:0;display:grid;place-items:center;color:white;font-weight:950;font-size:21px}
+.nav-links{display:flex;gap:18px;color:var(--muted);font-weight:750;font-size:13px}
+.nav-links a:hover{color:var(--ink)}
+.nav-cta{
+  padding:11px 16px;border-radius:999px;background:var(--dark);color:#fff;
+  font-size:13px;font-weight:850;box-shadow:0 12px 30px rgba(6,24,39,.2)
 }
 
-.brand-subtitle{
-  margin-left:50px;
-  font-size:11px;
-  font-weight:750;
-  letter-spacing:0;
-  color:#667085;
-  line-height:1.1;
+/* HERO */
+.hero{padding:74px 0 46px}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:center}
+.launch-badge{
+  display:inline-flex;align-items:center;gap:9px;padding:9px 13px;border-radius:999px;
+  background:#fff4ed;border:1px solid #ffd4c2;color:#c74613;font-size:12px;font-weight:950;
+  text-transform:uppercase;letter-spacing:.075em
+}
+.launch-badge .live{width:9px;height:9px;border-radius:50%;background:var(--splunk-orange);box-shadow:0 0 0 6px rgba(255,95,31,.13)}
+h1{
+  margin:20px 0 18px;font-size:clamp(52px,6.6vw,88px);line-height:.91;
+  letter-spacing:-.078em;color:var(--dark)
+}
+.grad{
+  background:linear-gradient(92deg,var(--splunk-orange),var(--splunk-pink) 47%,var(--ingram-blue));
+  -webkit-background-clip:text;background-clip:text;color:transparent
+}
+.lead{font-size:20px;line-height:1.55;color:#475467;max-width:710px;margin:0 0 20px}
+.distributor-line{
+  display:flex;gap:11px;align-items:flex-start;padding:15px 17px;border-radius:20px;
+  background:rgba(255,255,255,.72);border:1px solid var(--line);max-width:700px;color:#344054;
+  font-size:14px;line-height:1.5
+}
+.distributor-line b{color:var(--ink)}
+.signature{
+  display:inline-flex;align-items:center;gap:8px;margin:17px 0 0;padding:7px 11px;border-radius:999px;
+  background:rgba(255,255,255,.76);border:1px solid var(--line);font-size:12px;color:var(--muted);font-weight:750
+}
+.signature a{
+  padding:6px 10px;border-radius:999px;background:linear-gradient(135deg,rgba(255,95,31,.11),rgba(0,118,206,.11));
+  border:1px solid rgba(16,32,51,.07);font-weight:950;color:var(--ink)
+}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
+.btn{
+  border:0;cursor:pointer;padding:14px 19px;border-radius:17px;font-weight:900;font-size:14px;
+  transition:.22s transform,.22s box-shadow
+}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{color:#fff;background:linear-gradient(135deg,var(--splunk-orange),var(--splunk-pink));box-shadow:0 18px 40px rgba(255,95,31,.25)}
+.btn-secondary{background:#fff;border:1px solid var(--line);color:var(--ink);box-shadow:var(--shadow-soft)}
+.visual{position:relative;min-height:530px}
+.orbit{
+  position:absolute;inset:0;border-radius:44px;background:linear-gradient(155deg,rgba(255,255,255,.96),rgba(255,255,255,.58));
+  border:1px solid rgba(255,255,255,.9);box-shadow:var(--shadow);overflow:hidden
+}
+.orbit:before{content:"";position:absolute;width:430px;height:430px;border-radius:50%;right:-130px;top:-125px;background:radial-gradient(circle,var(--ingram-blue),transparent 64%);opacity:.23}
+.orbit:after{content:"";position:absolute;width:380px;height:380px;border-radius:50%;left:-140px;bottom:-145px;background:radial-gradient(circle,var(--splunk-orange),transparent 66%);opacity:.22}
+.hero-card{
+  position:absolute;z-index:2;background:#fff;border:1px solid var(--line);border-radius:24px;padding:18px;
+  box-shadow:0 22px 60px rgba(16,32,51,.12);animation:float 6s ease-in-out infinite
+}
+.hero-card:nth-of-type(3){animation-delay:-2s}.hero-card:nth-of-type(4){animation-delay:-4s}
+.hc1{left:28px;top:44px;width:290px}
+.hc2{right:28px;top:175px;width:286px}
+.hc3{left:76px;bottom:62px;width:340px}
+.mini-kicker{font-size:11px;font-weight:950;color:var(--muted);text-transform:uppercase;letter-spacing:.09em}
+.mini-main{font-size:22px;font-weight:950;letter-spacing:-.045em;margin-top:8px}
+.mini-copy{font-size:13px;color:var(--muted);line-height:1.45;margin-top:7px}
+.pill-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+.pill{font-size:11px;font-weight:850;padding:7px 9px;border-radius:999px;background:#f3f6fa;border:1px solid var(--line);color:#344054}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+/* GENERIC */
+.section{padding:62px 0}
+.section-head{display:flex;justify-content:space-between;gap:28px;align-items:flex-end;margin-bottom:24px}
+.section h2{font-size:clamp(34px,4vw,54px);line-height:.98;letter-spacing:-.062em;margin:0}
+.section p.sub{max-width:670px;margin:0;color:var(--muted);font-size:16px;line-height:1.55}
+.kicker{font-size:12px;font-weight:950;text-transform:uppercase;letter-spacing:.09em;color:var(--splunk-orange);margin-bottom:10px}
+.soft-section{background:rgba(255,255,255,.54);border-top:1px solid rgba(230,237,245,.8);border-bottom:1px solid rgba(230,237,245,.8)}
+.tag{display:inline-flex;padding:7px 10px;border-radius:999px;background:#fff4ed;color:#c74613;border:1px solid #ffd4c2;font-size:11px;font-weight:900}
+.tag.blue{background:#edf8ff;color:#006ca9;border-color:#cdeaff}
+.tag.dark{background:#eaf0f5;color:#233648;border-color:#d5e0ea}
+
+/* PATH CHOOSER */
+.audience-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.audience-card{
+  position:relative;overflow:hidden;background:#fff;border:1px solid var(--line);border-radius:32px;padding:28px;
+  box-shadow:var(--shadow-soft);cursor:pointer;transition:.24s transform,.24s box-shadow,.24s border-color
+}
+.audience-card:hover{transform:translateY(-5px);box-shadow:var(--shadow);border-color:rgba(255,95,31,.28)}
+.audience-card:after{content:"";position:absolute;width:170px;height:170px;border-radius:50%;right:-65px;bottom:-80px;background:radial-gradient(circle,rgba(255,95,31,.18),transparent 67%)}
+.audience-card.customer:after{background:radial-gradient(circle,rgba(0,118,206,.2),transparent 67%)}
+.audience-icon{width:54px;height:54px;border-radius:19px;display:grid;place-items:center;color:#fff;font-weight:950;background:linear-gradient(135deg,var(--splunk-orange),var(--splunk-pink));margin-bottom:20px}
+.customer .audience-icon{background:linear-gradient(135deg,var(--ingram-blue),var(--cisco-blue))}
+.audience-card h3{font-size:30px;letter-spacing:-.05em;margin:0 0 9px}
+.audience-card p{color:var(--muted);font-size:14px;line-height:1.5;margin:0 0 18px}
+.audience-points{display:grid;gap:9px}
+.audience-points span{font-size:13px;color:#344054;display:flex;gap:8px}
+.arrow-link{display:inline-flex;margin-top:19px;color:var(--ink);font-weight:900;font-size:13px}
+
+/* DOMAINS */
+.domain-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.domain-card{
+  background:#fff;border:1px solid var(--line);border-radius:30px;padding:25px;box-shadow:var(--shadow-soft);
+  transition:.24s transform,.24s box-shadow;position:relative;overflow:hidden
+}
+.domain-card:hover{transform:translateY(-5px);box-shadow:var(--shadow)}
+.domain-icon{width:54px;height:54px;border-radius:18px;display:grid;place-items:center;color:#fff;font-size:21px;font-weight:950;margin-bottom:18px}
+.security .domain-icon{background:linear-gradient(135deg,var(--splunk-orange),var(--splunk-pink))}
+.observability .domain-icon{background:linear-gradient(135deg,var(--ingram-blue),var(--cisco-blue))}
+.platform .domain-icon{background:linear-gradient(135deg,#7047eb,var(--splunk-pink))}
+.domain-card h3{font-size:25px;letter-spacing:-.045em;margin:0 0 9px}
+.domain-card p{font-size:14px;color:var(--muted);line-height:1.5;margin:0 0 16px}
+.domain-card ul{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+.domain-card li{font-size:13px;color:#344054;display:flex;gap:8px}
+.domain-card li:before{content:"✓";color:var(--green);font-weight:950}
+.official-link{display:inline-flex;margin-top:18px;font-size:12px;font-weight:900;color:var(--ingram-blue)}
+
+/* JOURNEY */
+.steps{display:grid;gap:14px}
+.step{
+  background:rgba(255,255,255,.91);border:1px solid var(--line);border-radius:26px;padding:21px;box-shadow:0 16px 44px rgba(16,32,51,.055);
+  cursor:pointer;transition:.2s box-shadow,.2s transform
+}
+.step:hover{box-shadow:0 23px 58px rgba(16,32,51,.085)}
+.step-head{display:grid;grid-template-columns:100px 1fr auto auto;gap:18px;align-items:center}
+.step-num{padding:13px;border-radius:17px;background:linear-gradient(135deg,var(--splunk-orange),var(--ingram-blue));color:white;text-align:center;font-size:12px;font-weight:950}
+.step h3{font-size:21px;letter-spacing:-.035em;margin:0 0 5px}
+.step p{margin:0;color:var(--muted);font-size:14px;line-height:1.48}
+.step-chevron{font-size:18px;color:#98a2b3;font-weight:950;transition:.2s transform,.2s color}
+.step.open .step-chevron{transform:rotate(180deg);color:var(--splunk-orange)}
+.step-detail{
+  display:none;margin:18px 0 2px 118px;padding:19px;border-radius:22px;
+  background:linear-gradient(135deg,rgba(255,95,31,.065),rgba(0,118,206,.065));border:1px solid rgba(16,32,51,.075)
+}
+.step.open .step-detail{display:block}
+.detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+.detail-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px}
+.detail-card b{display:block;font-size:14px;margin-bottom:6px}
+.detail-card span{display:block;color:var(--muted);font-size:12.5px;line-height:1.48}
+.detail-card a{color:var(--ingram-blue);font-weight:900;text-decoration:underline;text-underline-offset:3px}
+.notice{margin-top:13px;padding:13px 14px;border-radius:16px;background:#fff;border:1px dashed #cbd6e2;color:#475467;font-size:12.5px;line-height:1.5}
+.role-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:14px}
+.role-box{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px}
+.role-box b{display:block;font-size:15px;margin-bottom:7px}.role-box span{font-size:12.5px;line-height:1.48;color:var(--muted)}
+.readiness{
+  margin-top:15px;background:linear-gradient(135deg,var(--dark),#0b3450);border-radius:22px;padding:19px;color:#fff
+}
+.readiness-top{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.readiness strong{font-size:18px}.readiness small{color:#bed0dd}
+.progress{height:9px;background:rgba(255,255,255,.13);border-radius:999px;overflow:hidden;margin:12px 0 14px}
+.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--splunk-orange),var(--splunk-pink));transition:.3s width}
+.check-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.check-item{display:flex;gap:9px;align-items:flex-start;padding:10px;border-radius:14px;background:rgba(255,255,255,.07);font-size:12.5px;color:#e4edf4;cursor:pointer}
+.check-item input{margin-top:2px;accent-color:var(--splunk-orange)}
+
+/* CUSTOMER USE CASE FINDER */
+.finder{
+  display:grid;grid-template-columns:.9fr 1.1fr;gap:20px;background:var(--dark);border-radius:38px;padding:28px;
+  box-shadow:var(--shadow);color:#fff;overflow:hidden;position:relative
+}
+.finder:after{content:"";position:absolute;width:420px;height:420px;border-radius:50%;right:-180px;top:-190px;background:radial-gradient(circle,rgba(0,160,210,.3),transparent 65%)}
+.finder-left,.finder-result{position:relative;z-index:2}
+.finder h3{font-size:31px;letter-spacing:-.055em;margin:0 0 10px}
+.finder p{color:#bed0dd;line-height:1.5;margin:0}
+.usecase-options{display:grid;gap:9px;margin-top:18px}
+.usecase-btn{
+  text-align:left;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.07);color:#fff;border-radius:16px;padding:12px 13px;
+  cursor:pointer;font-weight:750;font-size:13px;transition:.18s background,.18s border-color
+}
+.usecase-btn:hover,.usecase-btn.active{background:rgba(255,95,31,.17);border-color:rgba(255,95,31,.42)}
+.finder-result{
+  background:#fff;color:var(--ink);border-radius:27px;padding:23px;border:1px solid rgba(255,255,255,.8)
+}
+.result-kicker{font-size:11px;font-weight:950;text-transform:uppercase;letter-spacing:.09em;color:var(--splunk-orange)}
+.result-title{font-size:30px;letter-spacing:-.055em;font-weight:950;margin:7px 0 8px}
+.result-copy{color:var(--muted);font-size:13.5px;line-height:1.5}
+.result-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:15px}
+.result-box{border-radius:16px;background:#f6f9fc;border:1px solid var(--line);padding:12px}
+.result-box b{display:block;font-size:12px;margin-bottom:5px}.result-box span{display:block;color:var(--muted);font-size:12px;line-height:1.4}
+.result-question{margin-top:12px;border-radius:16px;padding:13px;background:#fff5ef;border:1px solid #ffd7c5;color:#7a3516;font-size:12.5px;line-height:1.45}
+
+/* INNOVATION MAP */
+.innovation-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:13px}
+.innovation{
+  min-height:220px;background:#fff;border:1px solid var(--line);border-radius:24px;padding:18px;box-shadow:var(--shadow-soft);
+  display:flex;flex-direction:column;transition:.22s transform,.22s box-shadow
+}
+.innovation:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.innovation .n{font-size:11px;font-weight:950;color:var(--splunk-orange);letter-spacing:.08em}
+.innovation h3{font-size:18px;letter-spacing:-.035em;margin:12px 0 8px}
+.innovation p{color:var(--muted);font-size:12.5px;line-height:1.46;margin:0}
+.innovation a{margin-top:auto;padding-top:16px;color:var(--ingram-blue);font-size:12px;font-weight:900}
+
+/* WHATS NEW */
+.news-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.news-card{background:#fff;border:1px solid var(--line);border-radius:24px;padding:20px;box-shadow:var(--shadow-soft)}
+.news-date{font-size:11px;font-weight:950;color:var(--splunk-orange);text-transform:uppercase;letter-spacing:.08em}
+.news-card h3{font-size:19px;letter-spacing:-.035em;margin:9px 0 8px}
+.news-card p{font-size:12.5px;color:var(--muted);line-height:1.47;margin:0 0 14px}
+.news-card a{font-size:12px;font-weight:900;color:var(--ingram-blue)}
+
+/* PRODUCT TOURS + DIGITAL KIT */
+.tour-grid,.kit-grid,.resource-grid,.business-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.tour,.kit,.resource,.business{
+  background:#fff;border:1px solid var(--line);border-radius:23px;padding:19px;box-shadow:var(--shadow-soft)
+}
+.tour b,.kit b,.resource b,.business b{display:block;font-size:16px;letter-spacing:-.025em;margin-bottom:7px}
+.tour span,.kit span,.resource span,.business span{display:block;color:var(--muted);font-size:12.5px;line-height:1.46}
+.tour a,.resource a{display:inline-flex;margin-top:14px;color:var(--ingram-blue);font-size:12px;font-weight:900}
+.placeholder{margin-top:11px;display:inline-flex;padding:6px 8px;border-radius:999px;background:#fff4ed;border:1px solid #ffd4c2;color:#b84518;font-size:10px;font-weight:950}
+
+/* CISCO 360 */
+.c360{
+  background:linear-gradient(135deg,#071827,#0b3049 57%,#0b5484);border-radius:36px;padding:30px;color:#fff;box-shadow:var(--shadow)
+}
+.c360-head{display:grid;grid-template-columns:1.1fr .9fr;gap:22px;align-items:start}
+.c360 h2{color:#fff}.c360 p{color:#bed0dd;line-height:1.55}
+.timeline{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px}
+.time-card{padding:17px;border:1px solid rgba(255,255,255,.12);border-radius:20px;background:rgba(255,255,255,.07)}
+.time-card b{display:block;color:#fff;font-size:14px;margin-bottom:6px}
+.time-card span{display:block;color:#c8d7e2;font-size:12.5px;line-height:1.45}
+.time-card.current{outline:2px solid rgba(255,95,31,.55)}
+.c360-note{margin-top:16px;color:#9fb5c5;font-size:11.5px}
+
+/* CTA */
+.final-cta{
+  margin:68px auto 0;max-width:1180px;border-radius:38px;padding:34px;
+  background:linear-gradient(135deg,#061827,#0a3654 54%,var(--splunk-orange));color:#fff;
+  display:grid;grid-template-columns:1fr auto;gap:22px;align-items:center;box-shadow:var(--shadow)
+}
+.final-cta h2{font-size:36px;letter-spacing:-.055em;margin:0 0 8px}
+.final-cta p{margin:0;color:#d8e4ee;line-height:1.5}
+.mail-btn{
+  display:inline-flex;padding:14px 19px;border-radius:999px;background:#fff;color:var(--dark);
+  font-size:13px;font-weight:950;box-shadow:0 14px 36px rgba(0,0,0,.16)
+}
+.footer{padding:42px 0 55px;color:#667085;text-align:center;font-size:12px}
+
+@media(max-width:1050px){
+  .innovation-grid{grid-template-columns:repeat(3,1fr)}
+  .news-grid,.tour-grid,.kit-grid,.resource-grid,.business-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:900px){
+  .nav-links{display:none}
+  .hero-grid,.finder,.c360-head,.final-cta{grid-template-columns:1fr}
+  .visual{min-height:470px}
+  .audience-grid,.domain-grid,.detail-grid,.role-grid,.result-grid,.check-grid,.timeline{grid-template-columns:1fr}
+  .step-head{grid-template-columns:82px 1fr auto}
+  .step-head .tag{display:none}
+  .step-detail{margin-left:0}
+  .section-head{display:block}.section p.sub{margin-top:12px}
+  .innovation-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:620px){
+  h1{font-size:50px}
+  .hero{padding-top:54px}
+  .visual{min-height:600px}
+  .hc1{left:14px;right:14px;width:auto}.hc2{left:30px;right:14px;top:220px;width:auto}.hc3{left:14px;right:30px;bottom:24px;width:auto}
+  .innovation-grid,.news-grid,.tour-grid,.kit-grid,.resource-grid,.business-grid{grid-template-columns:1fr}
+  .step-head{grid-template-columns:1fr auto}.step-num{width:max-content}.step-head>div:nth-child(2){grid-column:1/-1}
 }
 
-.creator-link{
-  color:#0076ce;
-  font-weight:850;
-  text-decoration:underline;
-  text-decoration-thickness:1px;
-  text-underline-offset:3px;
-}
+.ingram-logo{height:42px;width:auto;display:block}
+.brand-text{font-size:24px}
+.distributor-line strong,.highlight-line{background:linear-gradient(90deg,var(--splunk-orange),var(--splunk-pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sig-top{margin:8px 0 0;display:flex}
+.hero-actions.single{display:flex}
+.partner-locator{margin-top:22px;background:#fff;border:1px solid var(--line);border-radius:28px;padding:22px;box-shadow:var(--shadow-soft)}
+.partner-locator-top{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+.partner-locator-top h3{font-size:28px;letter-spacing:-.045em;margin:0}
+.partner-locator-top p{margin:6px 0 0;color:var(--muted);font-size:14px;line-height:1.5;max-width:640px}
+.partner-search{display:flex;gap:10px;align-items:center}
+.partner-search input{padding:13px 14px;border-radius:16px;border:1px solid var(--line);min-width:270px;font:inherit}
+.partner-count{font-size:12px;font-weight:850;color:var(--muted)}
+.partner-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.partner-card{background:#f8fbfe;border:1px solid var(--line);border-radius:18px;padding:14px}
+.partner-card b{display:block;font-size:15px;letter-spacing:-.02em;margin-bottom:6px;color:var(--ink)}
+.partner-card span{display:block;font-size:12px;color:var(--muted);line-height:1.45}
+.sim-link{display:inline-flex;margin-top:14px;color:#fff;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);padding:11px 14px;border-radius:14px;font-size:12px;font-weight:900}
+@media(max-width:1050px){.partner-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:620px){.partner-grid{grid-template-columns:1fr}.partner-search input{min-width:unset;width:100%}.partner-search{width:100%}.ingram-logo{height:34px}.brand-text{font-size:20px}}
 
-.creator-link:hover{
-  color:#ff5f1f;
-}
-.brand-copy{
-  display:flex;
-  flex-direction:column;
-  gap:2px;
-  line-height:1.05;
-}
-
-.creator-link{
-  color:#0076ce;
-  font-weight:850;
-  text-decoration:underline;
-  text-decoration-thickness:1px;
-  text-underline-offset:3px;
-}
-
-.creator-link:hover{
-  color:#ff5f1f;
-}
-    .note{margin-top:14px;border-radius:20px;padding:15px 16px;background:linear-gradient(135deg,rgba(255,95,31,.08),rgba(0,118,206,.08));border:1px solid rgba(7,24,39,.08);color:#344054;font-size:13px;line-height:1.55}
-    .signal-list{display:grid;gap:9px;margin-top:12px}
-    .signal-list div{padding:11px 13px;border-radius:15px;background:#f7f9fc;border:1px solid var(--line);font-size:13px;color:#344054;line-height:1.45}
-    .readiness{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
-    .ready-card{border-radius:22px;padding:18px;border:1px solid var(--line);background:#fbfcfe}
-    .ready-card strong{display:block;color:var(--ink);font-size:17px;margin-bottom:8px}
-    .ready-card ul{margin:0;padding-left:18px;color:#475467;font-size:13px;line-height:1.7}
-    .callout{background:#071827;color:white;border-radius:30px;padding:26px;box-shadow:var(--shadow);margin-top:20px;display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center}
-    .callout h3{margin:0 0 7px;font-size:28px;letter-spacing:-.05em;color:white}
-    .callout p{margin:0;color:#c7d4df;line-height:1.55}
-    .callout .btn-secondary{background:white;color:var(--ink)}
-    .resource-hub{background:white;border:1px solid var(--line);border-radius:32px;padding:24px;box-shadow:0 18px 52px rgba(7,24,39,.07)}
-    .hub-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:18px}
-
-    .cisco360-wrap{background:#071827;color:white;border-radius:36px;padding:28px;box-shadow:var(--shadow);position:relative;overflow:hidden}
-    .cisco360-wrap:before{content:"";position:absolute;right:-120px;top:-140px;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 65%);opacity:.30}
-    .cisco360-wrap:after{content:"";position:absolute;left:-140px;bottom:-160px;width:330px;height:330px;border-radius:50%;background:radial-gradient(circle,var(--cyan),transparent 66%);opacity:.22}
-    .cisco360-wrap .section-head{position:relative;z-index:1}
-    .cisco360-wrap h2{color:white}
-    .cisco360-wrap .sub{color:#c7d4df}
-    .cisco360-grid{position:relative;z-index:1;display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:20px}
-    .cisco360-card{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.13);border-radius:22px;padding:18px;min-height:158px}
-    .cisco360-card b{display:block;color:white;font-size:16px;letter-spacing:-.03em;margin-bottom:8px}
-    .cisco360-card span{display:block;color:#d8e4ee;font-size:13px;line-height:1.5}
-    .cisco360-card .metric{display:inline-flex;margin-bottom:12px;padding:7px 10px;border-radius:999px;background:rgba(255,95,31,.16);border:1px solid rgba(255,95,31,.28);color:#ffd8c8;font-size:12px;font-weight:900}
-    .cisco360-actions{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
-    .action-panel{background:white;color:var(--text);border-radius:24px;padding:20px;border:1px solid rgba(255,255,255,.2)}
-    .action-panel b{display:block;color:var(--ink);font-size:18px;letter-spacing:-.03em;margin-bottom:8px}
-    .action-panel ul{margin:0;padding-left:18px;color:#475467;font-size:13px;line-height:1.7}
-    .source-line{position:relative;z-index:1;margin-top:14px;color:#b7c7d6;font-size:12px;line-height:1.5}
-
-    .footer{padding:44px 0 56px;text-align:center;color:#667085;font-size:13px;line-height:1.5}
-    @media(max-width:940px){.hero-grid,.section-head,.grid-2,.grid-3,.grid-4,.outcome-grid,.readiness,.hub-grid,.callout,.cisco360-grid,.cisco360-actions{grid-template-columns:1fr}.step-top{grid-template-columns:1fr auto}.step-label{grid-column:1 / -1}.nav-links{display:none}}
-  </style>
+</style>
 </head>
 <body>
-  <nav class="nav">
-    <div class="shell nav-inner">
-      
-<div class="brand brand-stack">
-  <a href="#top" class="brand-main">
-    <span class="brand-mark"></span>
-    <span>Splunk Partner Activation Kit</span>
-  </a>
-
-  <small class="brand-subtitle">
-    Developed by 
-    <a class="creator-link" href="https://www.linkedin.com/in/calacamli" target="_blank" rel="noopener">
-      Cihan Alaçamlı
-    </a>
-  </small>
-</div>
-      <div class="nav-links">
-        <a href="#outcomes">Outcomes</a>
-        <a href="#journey">Journey</a>
-        <a href="#resources">Resources</a>
-        <a href="#cisco360">Splunk & Cisco 360</a>
-      </div>
-      <a class="nav-cta" href="mailto:cisco.tr@ingrammicro.com?subject=Splunk%20Partner%20Activation%20Request&body=Hello%20Ingram%20Micro%20Team,%0D%0A%0D%0AWe%20would%20like%20to%20start%20our%20Splunk%20partner%20activation%20journey.%0D%0A%0D%0ACompany:%0D%0AContact%20Name:%0D%0APartner%20Profile:%0D%0AInterested%20Area:%20Security%20/%20Platform%20/%20Observability%0D%0ANotes:%0D%0A">Contact Ingram Micro</a>
+<nav class="nav">
+  <div class="shell nav-inner">
+    <a class="brand" href="#top"><img class="ingram-logo" src="data:image/png;base64,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" alt="Ingram Micro logo"><span class="brand-text">Splunk Growth Hub</span></a>
+    <div class="nav-links">
+      <a href="#paths">Start</a>
+      <a href="#partner">Partners</a>
+      <a href="#customer">Customers</a>
+      <a href="#innovation">Cisco + Splunk</a>
+      <a href="#new">What's New</a>
+      <a href="#resources">Resources</a>
     </div>
-  </nav>
+    <a class="nav-cta" href="mailto:cisco.tr@ingrammicro.com?subject=Splunk%20Growth%20Hub%20Contact">Contact Ingram Micro</a>
+  </div>
+</nav>
 
-  <main id="top">
-    <section class="hero shell">
-      <div class="hero-grid">
+<main id="top">
+<section class="hero shell">
+  <div class="hero-grid">
+    <div>
+      <div class="launch-badge"><span class="live"></span> New distributor launch</div>
+      <h1>Welcome to the <span class="grad">Splunk Growth Hub.</span></h1>
+      <p class="lead">A practical hub for partners and customers to explore Splunk, connect the Cisco + Splunk story, build capability and turn real business problems into action.</p>
+      <div class="distributor-line"><span>●</span><div><strong>Ingram Micro Türkiye is now a Splunk distributor.</strong><br>We are building the local enablement, opportunity and go-to-market engine from day one. Distribution operating details will be added as the final commercial model is confirmed.</div></div>
+      <div class="sig-top"><div class="signature">Developed by <a href="https://www.linkedin.com/in/calacamli" target="_blank" rel="noopener">Cihan Alaçamlı</a></div></div>
+      <div class="hero-actions single">
+        <button class="btn btn-primary" onclick="document.querySelector('#paths').scrollIntoView()">Choose Your Path</button>
+      </div>
+    </div>
+    <div class="visual">
+      <div class="orbit"></div>
+      <div class="hero-card hc1">
+        <div class="mini-kicker">Partner activation</div>
+        <div class="mini-main">Build your Splunk practice</div>
+        <div class="mini-copy">Partner entry, enablement, certification, first opportunity and GTM activation.</div>
+        <div class="pill-row"><span class="pill">Partnerverse</span><span class="pill">Training</span><span class="pill">Pipeline</span></div>
+      </div>
+      <div class="hero-card hc2">
+        <div class="mini-kicker">Customer value</div>
+        <div class="mini-main">Find the right motion</div>
+        <div class="mini-copy">Security, Observability or Data Platform — starting from the business problem.</div>
+        <div class="pill-row"><span class="pill">SOC</span><span class="pill">ITOps</span><span class="pill">AI / Data</span></div>
+      </div>
+      <div class="hero-card hc3">
+        <div class="mini-kicker">Cisco + Splunk</div>
+        <div class="mini-main">From telemetry to action</div>
+        <div class="mini-copy">Security, networking, observability and trusted machine data come together in one ecosystem story.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section soft-section">
+  <div class="shell">
+    <div class="section-head">
+      <div><div class="kicker">Three motions</div><h2>Explore Splunk domains</h2></div>
+      <p class="sub">The portfolio is easier to understand when you start with the outcome: protect the business, keep digital services healthy, or turn machine data into trusted intelligence.</p>
+    </div>
+    <div class="domain-grid">
+      <article class="domain-card security">
+        <div class="domain-icon">S</div>
+        <h3>Security</h3>
+        <p>Unify security data, analytics, tools and AI for modern detection, investigation and response.</p>
+        <ul><li>Agentic SOC</li><li>SIEM / Enterprise Security</li><li>SOAR / UEBA</li><li>Detection engineering</li></ul>
+        <a class="official-link" target="_blank" rel="noopener" href="https://www.splunk.com/en_us/products/cyber-security.html">Explore official Security page →</a>
+      </article>
+      <article class="domain-card observability">
+        <div class="domain-icon">O</div>
+        <h3>Observability</h3>
+        <p>Connect applications, infrastructure, digital experience, network insight and business context.</p>
+        <ul><li>Agentic Observability</li><li>APM / Infrastructure</li><li>Digital Experience</li><li>AI + agent monitoring</li></ul>
+        <a class="official-link" target="_blank" rel="noopener" href="https://www.splunk.com/en_us/products/observability-explainer.html">Explore official Observability page →</a>
+      </article>
+      <article class="domain-card platform">
+        <div class="domain-icon">D</div>
+        <h3>Data Platform</h3>
+        <p>Transform raw machine data into organized, contextualized insights for humans and AI agents.</p>
+        <ul><li>Cisco Data Fabric</li><li>Federated Search</li><li>Machine Data Lake</li><li>AI-ready operational data</li></ul>
+        <a class="official-link" target="_blank" rel="noopener" href="https://www.splunk.com/en_us/products/platform.html">Explore official Platform page →</a>
+      </article>
+    </div>
+  </div>
+</section><section class="section shell" id="paths">
+  <div class="section-head">
+    <div><div class="kicker">Start here</div><h2>What brings you here?</h2></div>
+    <p class="sub">The experience branches by intent. Partners get an activation journey. Customers get a use-case-led exploration path.</p>
+  </div>
+  <div class="audience-grid">
+    <div class="audience-card" onclick="document.querySelector('#partner').scrollIntoView()">
+      <div class="audience-icon">P</div>
+      <h3>I’m a Partner</h3>
+      <p>Build or accelerate your Splunk practice with a clear commercial and technical path.</p>
+      <div class="audience-points">
+        <span>✓ Become a Splunk partner</span>
+        <span>✓ Choose Security / Observability / Platform</span>
+        <span>✓ Build sales + technical capability</span>
+        <span>✓ Create your first opportunity</span>
+      </div>
+      <span class="arrow-link">Open Partner Journey →</span>
+    </div>
+    <div class="audience-card customer" onclick="document.querySelector('#customer').scrollIntoView()">
+      <div class="audience-icon">C</div>
+      <h3>I’m a Customer</h3>
+      <p>Start from the problem you are trying to solve — not from a product name.</p>
+      <div class="audience-points">
+        <span>✓ Identify the right Splunk motion</span>
+        <span>✓ Understand the buyer / business case</span>
+        <span>✓ See where Cisco strengthens the story</span>
+        <span>✓ Explore official product experiences</span>
+      </div>
+      <span class="arrow-link">Open Use-Case Finder →</span>
+    </div>
+  </div>
+</section>
+
+
+
+
+<section class="section shell" id="partner">
+  <div class="section-head">
+    <div><div class="kicker">For partners</div><h2>Partner activation journey</h2></div>
+    <p class="sub">A cleaner flow from eligibility to activation. The goal is simple: make partners understand how to enter, what to learn first and how to build the first opportunity with Ingram Micro.</p>
+  </div>
+  <div class="steps">
+    <article class="step" onclick="toggleStep(this)">
+      <div class="step-head">
+        <div class="step-num">STEP 1</div>
+        <div><h3>Establish eligibility</h3><p>A company must first be a Cisco partner before it can move into the Splunk partner journey.</p></div>
+        <span class="tag">Required</span><span class="step-chevron">⌄</span>
+      </div>
+      <div class="step-detail" onclick="event.stopPropagation()">
+        <div class="detail-grid">
+          <div class="detail-card"><b>Cisco partner prerequisite</b><span>Before anything else, the company must hold the right Cisco partner foundation. Start by aligning with Ingram Micro Türkiye.</span></div>
+          <div class="detail-card"><b>Ingram Micro alignment</b><span>Confirm company profile, main contacts and intended Splunk motion with the Ingram Micro team.</span></div>
+          <div class="detail-card"><b>Why this step matters</b><span>It prevents partners from entering the Splunk journey without the proper Cisco ecosystem foundation.</span></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="step" onclick="toggleStep(this)">
+      <div class="step-head">
+        <div class="step-num">STEP 2</div>
+        <div><h3>Apply to Splunk Partnerverse</h3><p>After Cisco partner eligibility is in place, continue with the official Splunk partner application flow.</p></div>
+        <span class="tag">Official</span><span class="step-chevron">⌄</span>
+      </div>
+      <div class="step-detail" onclick="event.stopPropagation()">
+        <div class="detail-grid">
+          <div class="detail-card"><b>Become a Partner</b><span>Start from the <a href="https://www.splunk.com/en_us/partners/become-a-partner.html" target="_blank">official Splunk partner page</a>.</span></div>
+          <div class="detail-card"><b>Partner Signup</b><span>Use the <a href="https://splunk.my.site.com/partner/s/partner-signup" target="_blank">Splunk Partner Signup portal</a> to begin the formal application.</span></div>
+          <div class="detail-card"><b>Portal Registration Workflow</b><span>Official onboarding guidance will be expanded after Cisco & Splunk distributor alignment.</span></div>
+        </div>
+        <div class="notice">Partnerverse remains the current Splunk partner program framework. Splunk states this structure is planned to fully integrate into Cisco 360 during 2027.</div>
+      </div>
+    </article>
+
+    <article class="step" onclick="toggleStep(this)">
+      <div class="step-head">
+        <div class="step-num">STEP 3</div>
+        <div><h3>Choose the first motion</h3><p>Select the Splunk motion that matches the customer pain: Security, Observability or Data Platform.</p></div>
+        <span class="tag blue">Motion</span><span class="step-chevron">⌄</span>
+      </div>
+      <div class="step-detail" onclick="event.stopPropagation()">
+        <div class="detail-grid">
+          <div class="detail-card"><b>Security</b><span>Start here for SOC modernization, SIEM, detection, investigation and response use cases.</span></div>
+          <div class="detail-card"><b>Observability</b><span>Start here for application performance, outage analysis, MTTR and service-health conversations.</span></div>
+          <div class="detail-card"><b>Data Platform</b><span>Start here for machine data, operational intelligence and AI-ready data stories.</span></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="step" onclick="toggleStep(this)">
+      <div class="step-head">
+        <div class="step-num">STEP 4</div>
+        <div><h3>Assign the role path</h3><p>Once the motion is selected, split the journey into Sales and Technical paths.</p></div>
+        <span class="tag dark">Role</span><span class="step-chevron">⌄</span>
+      </div>
+      <div class="step-detail" onclick="event.stopPropagation()">
+        <div class="role-grid">
+          <div class="role-box"><b>Sales Path</b><span>Buyer pain, use-case positioning, discovery questions, competition awareness and first pipeline action.</span></div>
+          <div class="role-box"><b>Technical Path</b><span>Data sources, architecture, integrations, demo storyline, training path and technical validation.</span></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="step" onclick="toggleStep(this)">
+      <div class="step-head">
+        <div class="step-num">STEP 5</div>
+        <div><h3>Learn and enable</h3><p>Build foundational Splunk vocabulary first; then deepen commercial and technical capability.</p></div>
+        <span class="tag">Enablement</span><span class="step-chevron">⌄</span>
+      </div>
+      <div class="step-detail" onclick="event.stopPropagation()">
+        <div class="detail-grid">
+          <div class="detail-card"><b>Training Hub</b><span><a href="https://www.splunk.com/en_us/training.html" target="_blank">Splunk Training & Certification</a></span></div>
+          <div class="detail-card"><b>Free Courses</b><span><a href="https://www.splunk.com/en_us/training/free-courses/overview.html" target="_blank">Free self-paced courses</a></span></div>
+          <div class="detail-card"><b>Learning Paths</b><span><a href="https://www.splunk.com/en_us/training/learning-paths.html" target="_blank">Official learning paths</a></span></div>
+          <div class="detail-card"><b>Certifications</b><span><a href="https://www.splunk.com/en_us/training/certification.html" target="_blank">Certification portfolio</a></span></div>
+          <div class="detail-card"><b>Cisco + Splunk resources</b><span><a href="https://www.cisco.com/site/us/en/partners/cisco-plus-splunk/index.html" target="_blank">Cisco plus Splunk partner page</a></span></div>
+          <div class="detail-card"><b>ECSS Training</b><span><a href="https://www.cisco.com/site/us/en/learn/training-certifications/training/courses/ecss.html" target="_blank">Enhancing Cisco Security Solutions with Data Analytics</a></span></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="step" onclick="toggleStep(this)">
+      <div class="step-head">
+        <div class="step-num">STEP 6</div>
+        <div><h3>Build the first opportunity</h3><p>Map measurable pain, identify the buyer and turn the first use case into a pipeline conversation.</p></div>
+        <span class="tag">Pipeline</span><span class="step-chevron">⌄</span>
+      </div>
+      <div class="step-detail" onclick="event.stopPropagation()">
+        <div class="detail-grid">
+          <div class="detail-card"><b>Account signals</b><span>Alert fatigue, recurring outages, visibility gaps, compliance pressure, data sprawl and AI-system uncertainty.</span></div>
+          <div class="detail-card"><b>Discovery prompts</b><span>Which incidents take longest to investigate? Which business service is most sensitive to downtime? Where do teams lack context?</span></div>
+          <div class="detail-card"><b>Qualification rule</b><span>Map one measurable pain, one owner, one usable data source and one next action before going deeper.</span></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="step" onclick="toggleStep(this)">
+      <div class="step-head">
+        <div class="step-num">STEP 7</div>
+        <div><h3>Activate with Ingram Micro</h3><p>Use Ingram Micro Türkiye to move from learning into workshops, architecture guidance, GTM and pipeline support.</p></div>
+        <span class="tag">Activation</span><span class="step-chevron">⌄</span>
+      </div>
+      <div class="step-detail" onclick="event.stopPropagation()">
+        <div class="detail-grid">
+          <div class="detail-card"><b>GTM support</b><span>Campaign planning, target-account logic and partner activation support.</span></div>
+          <div class="detail-card"><b>Technical support</b><span>Architecture guidance, use-case framing and Cisco + Splunk technical story support.</span></div>
+          <div class="detail-card"><b>Pipeline acceleration</b><span>Opportunity review, next-step planning and customer engagement support.</span></div>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+
+<section class="section soft-section" id="customer">
+  <div class="shell">
+    <div class="section-head">
+      <div><div class="kicker">For customers</div><h2>Find your Splunk motion</h2></div>
+      <p class="sub">Pick the problem that sounds most familiar. The finder maps the pain to a likely Splunk motion, buyer, Cisco connection and discovery question.</p>
+    </div>
+    <div class="finder">
+      <div class="finder-left">
+        <h3>What are you trying to solve?</h3>
+        <p>Start from the operational problem. The product comes second.</p>
+        <div class="usecase-options">
+          <button class="usecase-btn active" data-case="soc">Our SOC is overloaded with alerts and investigations take too long.</button>
+          <button class="usecase-btn" data-case="outage">Application outages become long war rooms and root cause is unclear.</button>
+          <button class="usecase-btn" data-case="network">App team blames network; network team blames application.</button>
+          <button class="usecase-btn" data-case="ai">We are deploying AI / agents and need visibility into quality, cost and risk.</button>
+          <button class="usecase-btn" data-case="data">Operational data is fragmented across tools, clouds and teams.</button>
+          <button class="usecase-btn" data-case="compliance">Security / audit investigations require too much manual data collection.</button>
+        </div>
+      </div>
+      <div class="finder-result">
+        <div class="result-kicker">Recommended motion</div>
+        <div class="result-title" id="resultTitle">Splunk Security / Agentic SOC</div>
+        <div class="result-copy" id="resultCopy">Unify security telemetry and analytics to reduce investigation friction, automate repetitive work and improve threat detection and response.</div>
+        <div class="result-grid">
+          <div class="result-box"><b>Typical buyer</b><span id="resultBuyer">CISO / SOC Manager / SecOps</span></div>
+          <div class="result-box"><b>Cisco connection</b><span id="resultCisco">Cisco XDR, security telemetry, Talos context</span></div>
+          <div class="result-box"><b>First measurable outcome</b><span id="resultOutcome">Reduce investigation time and analyst workload</span></div>
+          <div class="result-box"><b>Next action</b><span id="resultAction">Map one recurring investigation workflow and data sources</span></div>
+        </div>
+        <div class="result-question"><b>Ask your team:</b> <span id="resultQuestion">Which incidents take the longest to validate and investigate today?</span></div>
+      </div>
+    </div>
+  </div>
+
+    <div class="partner-locator">
+      <div class="partner-locator-top">
         <div>
-          <div class="eyebrow"><span class="dot"></span> Ingram Micro x Cisco x Splunk Partner Enablement</div>
-          <h1>Become <span class="grad">Splunk-ready</span> with a clear activation path.</h1>
-          <p class="lead">A practical partner journey that shows where to start, which Splunk domain to focus on, what to learn, how to build the first opportunity and when you are ready to engage customers.</p>
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="#journey">Start the Journey</a>
-            <a class="btn btn-secondary" href="#resources">Open Resource Hub</a>
-          </div>
+          <h3>Partner Finder in Türkiye</h3>
+          <p>If you are a customer and want to explore the Splunk ecosystem in Türkiye, you can start with this quick partner locator. Public ecosystem visibility continues to evolve; use this as a practical starting point and contact Ingram Micro for guidance.</p>
         </div>
-        <div class="hero-card">
-          <div class="status">
-            <div class="status-row"><div class="status-num">1</div><div><b>Partner entry</b><span>Start the Splunk Partnerverse application path and align with Ingram Micro for local onboarding support.</span></div></div>
-            <div class="status-row"><div class="status-num">2</div><div><b>Domain selection</b><span>Choose the first motion: Security, Platform or Observability.</span></div></div>
-            <div class="status-row"><div class="status-num">3</div><div><b>Enablement</b><span>Build sales and technical confidence through official training, learning paths and certifications.</span></div></div>
-            <div class="status-row"><div class="status-num">4</div><div><b>Activation</b><span>Map target accounts, run discovery and convert the first use case into pipeline.</span></div></div>
-          </div>
+        <div class="partner-search">
+          <input id="partnerSearch" type="text" placeholder="Search partner name...">
         </div>
       </div>
-    </section>
-
-    <section class="section shell" id="outcomes">
-      <div class="section-head">
-        <h2>What this site should make clear</h2>
-        <p class="sub">The goal is not to explain every Splunk detail. The goal is to help a partner understand where they are, what to do next and how close they are to customer-facing readiness.</p>
+      <div class="partner-count" id="partnerCount">13 partners listed</div>
+      <div class="partner-grid" id="partnerGrid">
+        <div class="partner-card" data-name="Datavira"><b>Datavira</b><span>Public partner listing.</span></div>
+        <div class="partner-card" data-name="Netsmart"><b>Netsmart</b><span>Public partner listing.</span></div>
+        <div class="partner-card" data-name="Seynur"><b>Seynur</b><span>Public partner listing.</span></div>
+        <div class="partner-card" data-name="SoftwareOne"><b>SoftwareOne</b><span>Public partner listing.</span></div>
+        <div class="partner-card" data-name="Morten"><b>Morten</b><span>Public partner listing.</span></div>
+        <div class="partner-card" data-name="Sekom"><b>Sekom</b><span>Public partner listing.</span></div>
+        <div class="partner-card" data-name="Soitron"><b>Soitron</b><span>Public partner listing.</span></div>
+        <div class="partner-card" data-name="Barikat"><b>Barikat</b><span>Public partner listing.</span></div>
+        <div class="partner-card" data-name="BrandIT Engineering"><b>BrandIT Engineering</b><span>Public partner listing.</span></div>
+        <div class="partner-card" data-name="Pure7"><b>Pure7</b><span>Public partner listing.</span></div>
+        <div class="partner-card" data-name="Telcoset"><b>Telcoset</b><span>Public partner listing.</span></div>
+        <div class="partner-card" data-name="Trustunit"><b>Trustunit</b><span>Public partner listing.</span></div>
+        <div class="partner-card" data-name="Wildcats"><b>Wildcats</b><span>Public partner listing.</span></div>
       </div>
-      <div class="outcome-grid">
-        <div class="outcome"><b>How to become a partner</b><span>Where to apply, what to prepare and where Ingram Micro supports the process.</span></div>
-        <div class="outcome"><b>Which motion to choose</b><span>Security, Platform or Observability, based on customer pain and partner capability.</span></div>
-        <div class="outcome"><b>How enablement works</b><span>Training links, certification direction and practical capability milestones.</span></div>
-        <div class="outcome"><b>When you are ready</b><span>A simple readiness view based on actions completed, not arbitrary percentage scoring.</span></div>
+    </div>
+</section>
+
+<section class="section shell" id="innovation">
+  <div class="section-head">
+    <div><div class="kicker">Better together</div><h2>Cisco + Splunk innovation map</h2></div>
+    <p class="sub">The advantage is not “Splunk plus another vendor.” It is the ability to connect Cisco’s network, security and infrastructure context with Splunk’s analytics and operational intelligence.</p>
+  </div>
+  <div class="innovation-grid">
+    <article class="innovation"><div class="n">01 / SECURITY</div><h3>Modern Security Operations</h3><p>Splunk Enterprise Security, SOAR and Cisco security context support detection, investigation and response at scale.</p><a href="https://www.splunk.com/en_us/products/cyber-security.html" target="_blank">Explore Security →</a></article>
+    <article class="innovation"><div class="n">02 / NETWORK + APP</div><h3>Full-Stack Visibility</h3><p>Splunk Observability and ThousandEyes help correlate application performance with network dependencies across owned and unowned environments.</p><a href="https://www.splunk.com/en_us/products/observability-explainer.html" target="_blank">Explore Observability →</a></article>
+    <article class="innovation"><div class="n">03 / AI SYSTEMS</div><h3>Observe AI & Agents</h3><p>Monitor AI application performance, quality, cost and agent behavior; connect operational visibility with the evolving AI security story.</p><a href="https://www.splunk.com/en_us/blog/observability/splunk-observability-ai-agent-monitoring-innovations.html" target="_blank">Explore AI Observability →</a></article>
+    <article class="innovation"><div class="n">04 / DATA</div><h3>Cisco Data Fabric</h3><p>Splunk Platform provides the machine-data foundation for federation, contextualization and trusted agentic operations across domains.</p><a href="https://www.splunk.com/en_us/products/platform.html" target="_blank">Explore Data Platform →</a></article>
+    <article class="innovation"><div class="n">05 / PARTNER GROWTH</div><h3>One Ecosystem Motion</h3><p>Cisco and Splunk partner programs increasingly converge, giving partners a broader route to skills, resources and joint market opportunity.</p><a href="https://www.cisco.com/site/us/en/partners/cisco-plus-splunk/index.html" target="_blank">Explore Partner Opportunity →</a></article>
+  </div>
+</section>
+
+<section class="section soft-section" id="new">
+  <div class="shell">
+    <div class="section-head">
+      <div><div class="kicker">2026 innovation spotlight</div><h2>What’s new in Splunk</h2></div>
+      <p class="sub">A current-state view of the themes shaping the Cisco + Splunk conversation in 2026.</p>
+    </div>
+    <div class="news-grid">
+      <article class="news-card"><div class="news-date">Security</div><h3>Agentic SOC</h3><p>Splunk’s current security positioning focuses on unifying data, analytics, tools and AI to automate routine work and surface higher-value security insight.</p><a href="https://www.splunk.com/en_us/products/cyber-security.html" target="_blank">Official page →</a></article>
+      <article class="news-card"><div class="news-date">Observability</div><h3>Agentic Observability</h3><p>AI SRE, agent observability and unified signals shift observability from passive monitoring toward guided detection, troubleshooting and remediation.</p><a href="https://www.splunk.com/en_us/blog/observability/splunk-observability-at-cisco-live.html" target="_blank">Cisco Live 2026 update →</a></article>
+      <article class="news-card"><div class="news-date">Data Platform</div><h3>Cisco Data Fabric powered by Splunk</h3><p>Federated Search, Machine Data Lake and data-management capabilities form a scalable machine-data layer for analytics and agentic operations.</p><a href="https://www.splunk.com/en_us/blog/platform/new-splunk-platform-innovations-cisco-live-2026.html" target="_blank">Platform innovations →</a></article>
+      <article class="news-card"><div class="news-date">Partner Ecosystem</div><h3>Partnerverse → Cisco 360</h3><p>Splunk states that Partnerverse is planned to fully integrate into the Cisco 360 Partner Program during 2027.</p><a href="https://www.splunk.com/en_us/partners.html" target="_blank">Partner update →</a></article>
+    </div>
+  </div>
+</section>
+
+<section class="section shell">
+  <div class="section-head">
+    <div><div class="kicker">Experience, don’t just read</div><h2>Experience Splunk</h2></div>
+    <p class="sub">Use Splunk’s official product tours to see workflows and interfaces before scheduling a deeper demo or workshop.</p>
+  </div>
+  <div class="tour-grid">
+    <div class="tour"><b>All Product Tours</b><span>Security, Observability, Platform and Cisco integration tours in one library.</span><a href="https://www.splunk.com/en_us/products/interactive-tours.html" target="_blank">Open tours →</a></div>
+    <div class="tour"><b>Enterprise Security Tour</b><span>Interactive walk-through of Splunk Enterprise Security workflows.</span><a href="https://www.splunk.com/en_us/form/enterprise-security-tour.html" target="_blank">Open ES tour →</a></div>
+    <div class="tour"><b>Free Trials & Downloads</b><span>Explore Splunk Enterprise, Cloud Platform and Observability trial options.</span><a href="https://www.splunk.com/en_us/download.html" target="_blank">Explore trials →</a></div>
+    <div class="tour"><b>Cisco + Splunk Partner Story</b><span>Official joint partner opportunity, resources and program context.</span><a href="https://www.splunk.com/en_us/partners/cisco-and-splunk.html" target="_blank">Open partner page →</a></div>
+  </div>
+</section>
+
+
+
+<section class="section shell" id="resources">
+  <div class="section-head">
+    <div><div class="kicker">Official resources</div><h2>Resource hub</h2></div>
+    <p class="sub">Fast access to the sources partners and customers are most likely to need during the first stage.</p>
+  </div>
+  <div class="resource-grid">
+    <div class="resource"><b>Become a Partner</b><span>Official Splunk Partnerverse entry point.</span><a href="https://www.splunk.com/en_us/partners/become-a-partner.html" target="_blank">Open →</a></div>
+    <div class="resource"><b>Training & Certification</b><span>Courses, learning paths and certification resources.</span><a href="https://www.splunk.com/en_us/training.html" target="_blank">Open →</a></div>
+    <div class="resource"><b>Splunk Lantern</b><span>Practical guidance and use-case content.</span><a href="https://lantern.splunk.com/" target="_blank">Open →</a></div>
+    <div class="resource"><b>Splunkbase</b><span>Apps, add-ons and integrations marketplace.</span><a href="https://splunkbase.splunk.com/" target="_blank">Open →</a></div>
+    <div class="resource"><b>Documentation</b><span>Official product and administration guidance.</span><a href="https://help.splunk.com/" target="_blank">Open →</a></div>
+    <div class="resource"><b>Product Tours</b><span>Interactive product experiences.</span><a href="https://www.splunk.com/en_us/products/interactive-tours.html" target="_blank">Open →</a></div>
+    <div class="resource"><b>Cisco + Splunk Partners</b><span>Joint ecosystem and partner opportunity.</span><a href="https://www.cisco.com/site/us/en/partners/cisco-plus-splunk/index.html" target="_blank">Open →</a></div>
+    <div class="resource"><b>Splunk Platform</b><span>Cisco Data Fabric, federation and AI-ready machine data.</span><a href="https://www.splunk.com/en_us/products/platform.html" target="_blank">Open →</a></div>
+  </div>
+</section>
+
+<section class="section shell">
+  <div class="c360">
+    <div class="c360-head">
+      <div>
+        <div class="kicker">Partner program evolution</div>
+        <h2>Splunk + Cisco 360</h2>
+        <p>The partner story is moving toward one broader Cisco + Splunk ecosystem. Keep the public message simple: build Splunk capability today, understand the Partnerverse program, and prepare for deeper Cisco 360 integration.</p>
       </div>
-    </section>
-
-    <section class="section shell" id="journey">
-      <div class="section-head">
-        <h2>Partner activation journey</h2>
-        <p class="sub">A simplified flow from eligibility to first opportunity. Duplicate standalone sections were removed; domain exploration, digital kit items and readiness outputs are now embedded into the right steps.</p>
-      </div>
-
-      <div class="journey">
-        <article class="step" onclick="toggleStep(this)">
-          <div class="step-top"><div class="step-label">STEP 1</div><div><h3>Start the partner entry path</h3><p>Begin with the official Splunk Partnerverse application and use Ingram Micro as the local guide for onboarding, enablement routing and first GTM alignment.</p></div><span class="chevron">⌄</span></div><div class="step-content" onclick="event.stopPropagation()">
-          <div class="grid-3">
-            <div class="mini-card"><b>Apply</b><span>Use the official Splunk “Become a Partner” path to start the application process.</span><a class="link-pill" href="https://www.splunk.com/en_us/partners/become-a-partner.html" target="_blank" rel="noopener">Open Become a Partner</a></div>
-            <div class="mini-card"><b>Prepare</b><span>Define partner profile, target customers, internal owner, technical contact and preferred domain.</span></div>
-            <div class="mini-card"><b>Align locally</b><span>Contact Ingram Micro to clarify onboarding expectations, local support model and first enablement motion.</span></div>
-          </div>
-        </div></article>
-
-        <article class="step" onclick="toggleStep(this)">
-          <div class="step-top"><div class="step-label">STEP 2</div><div><h3>Choose your Splunk domain</h3><p>Start with the business problem. Each card links directly to the official Splunk product page and is visibly clickable.</p></div><span class="chevron">⌄</span></div><div class="step-content" onclick="event.stopPropagation()">
-          <div class="grid-3">
-            <a class="domain-card" href="https://www.splunk.com/en_us/products/cyber-security.html" target="_blank" rel="noopener">
-              <span class="card-kicker">Official Splunk page</span><b>Security</b><span>Unify security data, analytics, tools and AI to support threat detection, investigation and response. Best fit for SOC modernization, SIEM, TDIR, compliance and threat hunting conversations.</span><span class="link-pill">Explore Security</span>
-            </a>
-            <a class="domain-card" href="https://www.splunk.com/en_us/products/platform.html" target="_blank" rel="noopener">
-              <span class="card-kicker">Official Splunk page</span><b>Platform</b><span>Search, analyze and investigate machine data from any source at scale. Best fit for data visibility, AI-ready telemetry, reporting, dashboards and operational intelligence conversations.</span><span class="link-pill">Explore Platform</span>
-            </a>
-            <a class="domain-card" href="https://www.splunk.com/en_us/products/observability.html" target="_blank" rel="noopener">
-              <span class="card-kicker">Official Splunk page</span><b>Observability</b><span>Connect application, infrastructure and digital experience visibility to business impact. Best fit for ITOps, AppOps, SRE, MTTR, SLA and service health conversations.</span><span class="link-pill">Explore Observability</span>
-            </a>
-          </div>
-        </div></article>
-
-        <article class="step" onclick="toggleStep(this)">
-          <div class="step-top"><div class="step-label">STEP 3</div><div><h3>Learn the portfolio in business language</h3><p>This is the “so what?” layer. It translates each domain into a customer problem, a buyer conversation and a first talk track.</p></div><span class="chevron">⌄</span></div><div class="step-content" onclick="event.stopPropagation()">
-          <div class="grid-3">
-            <div class="mini-card"><b>Security conversation</b><span>Customer pain: fragmented telemetry, alert fatigue, investigation delay, compliance pressure. Partner talk track: unify security operations and move from reactive firefighting to proactive risk mitigation.</span></div>
-            <div class="mini-card"><b>Platform conversation</b><span>Customer pain: machine data growth, disconnected dashboards, high data movement cost, weak AI data foundation. Partner talk track: turn raw operational telemetry into structured, searchable, AI-ready intelligence.</span></div>
-            <div class="mini-card"><b>Observability conversation</b><span>Customer pain: service outages, slow troubleshooting, poor app visibility, war-room culture. Partner talk track: connect performance problems to root cause and business impact faster.</span></div>
-          </div>
-          <div class="grid-4" style="margin-top:14px">
-            <div class="mini-card"><b>Buyer</b><span>CISO, SOC Manager, CIO, IT Ops, App Owner, Platform Owner.</span></div>
-            <div class="mini-card"><b>Trigger</b><span>Breach, audit, downtime, SLA pressure, data sprawl, cloud complexity.</span></div>
-            <div class="mini-card"><b>Value</b><span>Visibility, faster response, better investigation, stronger resilience.</span></div>
-            <div class="mini-card"><b>Next action</b><span>Select 5 accounts and prepare discovery questions before any product pitch.</span></div>
-          </div>
-        </div></article>
-
-        <article class="step" onclick="toggleStep(this)">
-          <div class="step-top"><div class="step-label">STEP 4</div><div><h3>Build the first opportunity</h3><p>Move from generic interest to a qualified first use case. The first opportunity should start from a measurable pain, not a product demo.</p></div><span class="chevron">⌄</span></div><div class="step-content" onclick="event.stopPropagation()">
-          <div class="grid-3">
-            <div class="mini-card"><b>Security use cases</b><span>Advanced threat detection, security monitoring, automation, orchestration, incident management, compliance and threat hunting.</span><a class="link-pill" href="https://www.splunk.com/en_us/products/cyber-security.html" target="_blank" rel="noopener">Use Security page</a></div>
-            <div class="mini-card"><b>Platform use cases</b><span>Data onboarding, federated search, analytics, dashboards, reporting, integrations and AI-ready operational data.</span><a class="link-pill" href="https://www.splunk.com/en_us/products/platform.html" target="_blank" rel="noopener">Use Platform page</a></div>
-            <div class="mini-card"><b>Observability use cases</b><span>Application visibility, infrastructure monitoring, digital experience, service health, faster troubleshooting and MTTR reduction.</span><a class="link-pill" href="https://www.splunk.com/en_us/products/observability.html" target="_blank" rel="noopener">Use Observability page</a></div>
-          </div>
-          <div class="signal-list">
-            <div><b>Discovery question:</b> Which incidents or outages take the longest to investigate today?</div>
-            <div><b>Discovery question:</b> Which data sources are missing from the customer’s current security or IT operations view?</div>
-            <div><b>Discovery question:</b> Are teams switching between separate tools and losing context during investigation?</div>
-            <div><b>Qualification rule:</b> If there is no measurable pain, no internal owner and no available data source, keep the account in awareness stage.</div>
-          </div>
-        </div></article>
-
-        <article class="step" onclick="toggleStep(this)">
-          <div class="step-top"><div class="step-label">STEP 5</div><div><h3>Frame architecture and integration simply</h3><p>Do not over-engineer this section. Partners need a simple mental model before deep technical design.</p></div><span class="chevron">⌄</span></div><div class="step-content" onclick="event.stopPropagation()">
-          <div class="grid-3">
-            <div class="mini-card"><b>Data flow</b><span>Source data → ingestion → search and correlation → dashboard, detection or alert → action.</span></div>
-            <div class="mini-card"><b>Cisco connection</b><span>Use Cisco’s footprint in network, security, applications and infrastructure as a strong telemetry and customer-entry advantage.</span></div>
-            <div class="mini-card"><b>Technical validation</b><span>Use official documentation, product tours, Splunk Lantern and Splunkbase before creating local diagrams or sizing content.</span></div>
-          </div>
-          <div class="grid-4" style="margin-top:14px">
-            <a class="resource-card" href="https://help.splunk.com/" target="_blank" rel="noopener"><b>Documentation</b><span>Official product and admin guidance.</span><span class="link-pill">Open docs</span></a>
-            <a class="resource-card" href="https://lantern.splunk.com/" target="_blank" rel="noopener"><b>Splunk Lantern</b><span>Practical guidance and use case content.</span><span class="link-pill">Open Lantern</span></a>
-            <a class="resource-card" href="https://splunkbase.splunk.com/" target="_blank" rel="noopener"><b>Splunkbase</b><span>Apps, add-ons and integrations.</span><span class="link-pill">Open Splunkbase</span></a>
-            <a class="resource-card" href="https://www.splunk.com/en_us/products/product-tours.html" target="_blank" rel="noopener"><b>Product tours</b><span>Interactive UI tours for faster orientation.</span><span class="link-pill">Open tours</span></a>
-          </div>
-        </div></article>
-
-        <article class="step" onclick="toggleStep(this)">
-          <div class="step-top"><div class="step-label">STEP 6</div><div><h3>Complete enablement and certification direction</h3><p>Sales and technical tracks are no longer empty persona cards. They are translated into official learning actions.</p></div><span class="chevron">⌄</span></div><div class="step-content" onclick="event.stopPropagation()">
-          <div class="grid-2">
-            <div class="mini-card"><b>Sales enablement route</b><span>Understand the domain, customer triggers, buyer pains, use cases and first pitch. Use learning paths and free training to build vocabulary before customer outreach.</span><a class="link-pill" href="https://www.splunk.com/en_us/training/learning-paths.html" target="_blank" rel="noopener">Open learning paths</a></div>
-            <div class="mini-card"><b>Technical enablement route</b><span>Build foundation in searching, data onboarding, dashboards, admin basics and domain-specific certifications depending on selected motion.</span><a class="link-pill" href="https://www.splunk.com/en_us/training/certification.html" target="_blank" rel="noopener">Open certifications</a></div>
-          </div>
-          <div class="grid-4" style="margin-top:14px">
-            <a class="resource-card" href="https://www.splunk.com/en_us/training.html" target="_blank" rel="noopener"><b>Training & Certification</b><span>Official hub for courses, learning paths and training resources.</span><span class="link-pill">Open hub</span></a>
-            <a class="resource-card" href="https://www.splunk.com/en_us/training/course-catalog.html" target="_blank" rel="noopener"><b>Course Catalog</b><span>Explore available courses for building expertise.</span><span class="link-pill">Open catalog</span></a>
-            <a class="resource-card" href="https://www.splunk.com/en_us/training/free-courses/overview.html" target="_blank" rel="noopener"><b>Free Training</b><span>Self-paced training for first-stage learning.</span><span class="link-pill">Open free courses</span></a>
-            <a class="resource-card" href="https://www.splunk.com/en_us/training/learning-paths-certifications.html" target="_blank" rel="noopener"><b>Certification Paths</b><span>Coursework aligned to certification preparation.</span><span class="link-pill">Open certification paths</span></a>
-          </div>
-        </div></article>
-
-        <article class="step" onclick="toggleStep(this)">
-          <div class="step-top"><div class="step-label">STEP 7</div><div><h3>Activate GTM and check readiness</h3><p>This step replaces the old “Digital Kit”, “Design Principle” and final placeholder sections. It gives a real operating plan and a readiness outcome.</p></div><span class="chevron">⌄</span></div><div class="step-content" onclick="event.stopPropagation()">
-          <div class="grid-4">
-            <div class="mini-card"><b>Phase 1</b><span>Pick one domain, nominate one sales owner and one technical owner, complete first official learning links.</span></div>
-            <div class="mini-card"><b>Phase 2</b><span>Select 10 target accounts using visible pain: SOC pressure, outages, compliance, data sprawl or hybrid complexity.</span></div>
-            <div class="mini-card"><b>Phase 3</b><span>Run discovery with a focused questionnaire and map each account to one use case.</span></div>
-            <div class="mini-card"><b>Phase 4</b><span>Review opportunities with Ingram Micro and decide whether to run a workshop, demo, campaign or executive briefing.</span></div>
-          </div>
-          <div class="readiness">
-            <div class="ready-card"><strong>Foundation Ready</strong><ul><li>Partner path started</li><li>Domain selected</li><li>Internal owners assigned</li></ul></div>
-            <div class="ready-card"><strong>Enablement Ready</strong><ul><li>Learning path started</li><li>Core pitch understood</li><li>Technical champion identified</li></ul></div>
-            <div class="ready-card"><strong>Opportunity Ready</strong><ul><li>Target accounts listed</li><li>Use case mapped</li><li>Ingram Micro review scheduled</li></ul></div>
-          </div>
-          <div class="callout">
-            <div><h3>Ready to activate your Splunk motion?</h3><p>Contact Ingram Micro to align onboarding, enablement and first opportunity planning.</p></div>
-            <a class="btn btn-secondary" href="mailto:cisco.tr@ingrammicro.com?subject=Splunk%20Partner%20Activation%20Request&body=Hello%20Ingram%20Micro%20Team,%0D%0A%0D%0AWe%20would%20like%20to%20start%20our%20Splunk%20partner%20activation%20journey.%0D%0A%0D%0ACompany:%0D%0AContact%20Name:%0D%0APartner%20Profile:%0D%0AInterested%20Area:%20Security%20/%20Platform%20/%20Observability%0D%0ANotes:%0D%0A">Contact with Ingram Micro</a>
-          </div>
-        </div></article>
-      </div>
-    </section>
-
-    <section class="section shell" id="resources">
-      <div class="resource-hub">
-        <div class="section-head" style="margin-bottom:0">
-          <h2>Resource hub</h2>
-          <p class="sub">This remains independent because it is a quick-access link library. All strategic content has been moved into the journey steps above.</p>
-        </div>
-        <div class="hub-grid">
-          <a class="resource-card" href="https://www.splunk.com/en_us/partners/become-a-partner.html" target="_blank" rel="noopener"><b>Become a Partner</b><span>Official Splunk Partnerverse entry point.</span><span class="link-pill">Open link</span></a>
-          <a class="resource-card" href="https://www.splunk.com/en_us/products/cyber-security.html" target="_blank" rel="noopener"><b>Security</b><span>Security operations, TDIR, SIEM and SOC modernization.</span><span class="link-pill">Open link</span></a>
-          <a class="resource-card" href="https://www.splunk.com/en_us/products/platform.html" target="_blank" rel="noopener"><b>Platform</b><span>Machine data, AI-ready intelligence and data fabric.</span><span class="link-pill">Open link</span></a>
-          <a class="resource-card" href="https://www.splunk.com/en_us/products/observability.html" target="_blank" rel="noopener"><b>Observability</b><span>Application, infrastructure and business visibility.</span><span class="link-pill">Open link</span></a>
-          <a class="resource-card" href="https://www.splunk.com/en_us/training.html" target="_blank" rel="noopener"><b>Training</b><span>Learning paths, course catalog and education resources.</span><span class="link-pill">Open link</span></a>
-          <a class="resource-card" href="https://www.splunk.com/en_us/training/certification.html" target="_blank" rel="noopener"><b>Certifications</b><span>Certification tracks and skill validation.</span><span class="link-pill">Open link</span></a>
-          <a class="resource-card" href="https://lantern.splunk.com/" target="_blank" rel="noopener"><b>Splunk Lantern</b><span>Practical use-case and implementation guidance.</span><span class="link-pill">Open link</span></a>
-          <a class="resource-card" href="https://splunkbase.splunk.com/" target="_blank" rel="noopener"><b>Splunkbase</b><span>Apps, add-ons and integrations marketplace.</span><span class="link-pill">Open link</span></a>
+      <div>
+        <div class="timeline">
+          <div class="time-card current"><b>Today</b><span>Splunk Partnerverse remains the current Splunk partner program and capability framework.</span></div>
+          <div class="time-card"><b>Transition</b><span>Cisco + Splunk partner resources, motions and skills increasingly converge.</span></div>
+          <div class="time-card"><b>2027</b><span>Splunk states Partnerverse is planned to fully integrate into Cisco 360 during 2027.</span></div>
         </div>
       </div>
-    </section>
+    </div>
+    <div class="c360-note">Public-facing note: internal PVI thresholds, confidential scoring logic, rebate mechanics and distributor-specific commercial rules are intentionally not published here.<br><a class="sim-link" href="https://cihanalacamli.github.io/" target="_blank" rel="noopener">Open Cisco 360 Simulator</a></div>
+  </div>
+</section>
 
-    <section class="section shell" id="cisco360">
-      <div class="cisco360-wrap">
-        <div class="section-head">
-          <h2>Splunk & Cisco 360</h2>
-          <p class="sub">Why this matters for Cisco partners: Splunk is not only a product conversation. It also becomes a Cisco 360 portfolio motion with its own value-index logic, enablement path and growth levers.</p>
-        </div>
 
-        <div class="cisco360-grid">
-          <div class="cisco360-card">
-            <span class="metric">Portfolio view</span>
-            <b>Splunk has its own Value Index</b>
-            <span>Splunk is treated as a separate Cisco portfolio value index. Unlike other portfolios, it currently focuses on Performance, Capabilities and Engagement rather than Foundational.</span>
-          </div>
-          <div class="cisco360-card">
-            <span class="metric">Capabilities</span>
-            <b>Enablement and badges matter</b>
-            <span>Partners can improve differentiation through foundational enablement and Partnerverse badges, including Advanced, Solutions, Services Capability and Industry badges.</span>
-          </div>
-          <div class="cisco360-card">
-            <span class="metric">Performance</span>
-            <b>Growth is measured</b>
-            <span>Splunk growth levers include incremental ACV, new customer sales, license capacity growth in existing customers and TCV growth across the Cisco portfolio.</span>
-          </div>
-          <div class="cisco360-card">
-            <span class="metric">Engagement</span>
-            <b>Source, market and document</b>
-            <span>Partner-sourced business, co-marketing activity and documented customer success can all support the Splunk practice growth story.</span>
-          </div>
-        </div>
 
-        <div class="cisco360-actions">
-          <div class="action-panel">
-            <b>What partners should do next</b>
-            <ul>
-              <li>Complete Splunk foundational enablement.</li>
-              <li>Identify which Partnerverse badges fit the practice.</li>
-              <li>Use partner-sourced opportunity discipline.</li>
-              <li>Track renewals for cross-sell and upsell potential.</li>
-              <li>Document customer success stories early.</li>
-            </ul>
-          </div>
-          <div class="action-panel">
-            <b>Where Ingram Micro can help</b>
-            <ul>
-              <li>Explain Splunk Value Index levers in plain language.</li>
-              <li>Help partners prioritize enablement and badges.</li>
-              <li>Support account mapping for iACV and TCV growth.</li>
-              <li>Guide renewal, deal-registration and customer-success motions.</li>
-              <li>Help partners interpret Cisco 360 impact through PXP / DPV where access is available.</li>
-            </ul>
-          </div>
-        </div>
+<section class="final-cta shell">
+  <div>
+    <h2>Ready to build with Splunk?</h2>
+    <p>Partner? Let’s build your Splunk practice. Customer? Let’s find the right first use case.</p>
+  </div>
+  <a class="mail-btn" href="mailto:cisco.tr@ingrammicro.com?subject=Splunk%20Growth%20Hub%20-%20Contact%20Request">Contact with Ingram Micro</a>
+</section>
 
-        <div class="source-line">Note: Cisco states that the Cisco + Splunk partner opportunity is about more than product integration: partners can engage with both programs, access resources, training and support, and expand into new markets. The Splunk Value Index section in the uploaded Cisco 360 guide is summarized here for partner-facing orientation.</div>
-      </div>
-    </section>
+<footer class="footer shell">
+  Ingram Micro Türkiye · Splunk Growth Hub · Developed by Cihan Alaçamlı
+</footer>
+</main>
 
-  </main>
+<script>
+function toggleStep(el){ el.classList.toggle('open'); }
 
-  <footer class="footer shell">
-    Partner activation concept for Ingram Micro. Use official Splunk, Cisco and Ingram Micro approval before external publication.
-  </footer>
+const cases = {
+  soc:{
+    title:'Splunk Security / Agentic SOC',
+    copy:'Unify security telemetry and analytics to reduce investigation friction, automate repetitive work and improve threat detection and response.',
+    buyer:'CISO / SOC Manager / SecOps',
+    cisco:'Cisco XDR, security telemetry, Talos context',
+    outcome:'Reduce investigation time and analyst workload',
+    action:'Map one recurring investigation workflow and data sources',
+    question:'Which incidents take the longest to validate and investigate today?'
+  },
+  outage:{
+    title:'Splunk Observability',
+    copy:'Correlate application, infrastructure, service and business context to reduce war-room time and accelerate root-cause analysis.',
+    buyer:'CIO / ITOps / SRE / App Owner',
+    cisco:'ThousandEyes + Cisco application / infrastructure context',
+    outcome:'Lower MTTR and improve service reliability',
+    action:'Choose one critical digital service and map its dependencies',
+    question:'Which business service creates the most painful outage investigations today?'
+  },
+  network:{
+    title:'Splunk Observability + ThousandEyes',
+    copy:'Connect application performance with network-path visibility to determine whether the issue sits in the app, infrastructure, internet or network domain.',
+    buyer:'ITOps / Network / AppOps / SRE',
+    cisco:'ThousandEyes network insights + Splunk Observability',
+    outcome:'End cross-team blame loops with shared evidence',
+    action:'Select one recurring performance complaint and trace the end-to-end path',
+    question:'How often do application and network teams enter the same incident with different dashboards and different truths?'
+  },
+  ai:{
+    title:'Splunk Observability for AI',
+    copy:'Monitor AI agents and AI infrastructure across performance, quality, security and cost so teams can operate AI systems with more confidence.',
+    buyer:'AI Platform / SRE / CIO / Engineering',
+    cisco:'Cisco AI infrastructure + evolving AI Defense integration story',
+    outcome:'Improve AI reliability, quality visibility and cost awareness',
+    action:'Define one production AI workflow and the quality / latency / cost signals that matter',
+    question:'Can you currently explain why an AI agent failed, slowed down, drifted or became more expensive?'
+  },
+  data:{
+    title:'Splunk Platform / Cisco Data Fabric',
+    copy:'Federate, organize and contextualize machine data so teams and AI agents can work from a more trusted operational intelligence layer.',
+    buyer:'CIO / Data Platform / ITOps / Security',
+    cisco:'Cisco Data Fabric powered by the Splunk Platform',
+    outcome:'Reduce data silos and improve cross-domain context',
+    action:'Map the top operational data sources and where teams currently duplicate or move data',
+    question:'How much operational context is trapped in separate tools, clouds or teams today?'
+  },
+  compliance:{
+    title:'Splunk Security + Data Platform',
+    copy:'Centralize searchable machine data and security context to make audit, investigation and evidence workflows faster and more repeatable.',
+    buyer:'CISO / Compliance / SOC / Risk',
+    cisco:'Cisco security telemetry + Splunk search and analytics',
+    outcome:'Reduce manual evidence collection and investigation effort',
+    action:'Pick one recurring audit or investigation workflow and list required data sources',
+    question:'Which audit or investigation requires the most manual collection and reconciliation today?'
+  }
+};
 
-  <script>
-    function toggleStep(step){
-      step.classList.toggle('open');
-    }
-  </script>
+document.querySelectorAll('.usecase-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.usecase-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const x=cases[btn.dataset.case];
+    document.getElementById('resultTitle').textContent=x.title;
+    document.getElementById('resultCopy').textContent=x.copy;
+    document.getElementById('resultBuyer').textContent=x.buyer;
+    document.getElementById('resultCisco').textContent=x.cisco;
+    document.getElementById('resultOutcome').textContent=x.outcome;
+    document.getElementById('resultAction').textContent=x.action;
+    document.getElementById('resultQuestion').textContent=x.question;
+  });
+});
+
+
+const partnerSearch=document.getElementById('partnerSearch');
+const partnerGrid=document.getElementById('partnerGrid');
+const partnerCount=document.getElementById('partnerCount');
+if(partnerSearch&&partnerGrid&&partnerCount){
+  const cards=[...partnerGrid.querySelectorAll('.partner-card')];
+  function filterPartners(){
+    const q=partnerSearch.value.toLowerCase().trim();
+    let visible=0;
+    cards.forEach(card=>{
+      const name=(card.dataset.name||'').toLowerCase();
+      const show=!q || name.includes(q);
+      card.style.display=show?'block':'none';
+      if(show) visible++;
+    });
+    partnerCount.textContent=`${visible} partner${visible===1?'':'s'} listed`;
+  }
+  partnerSearch.addEventListener('input',filterPartners);
+  filterPartners();
+}
+
+</script>
 </body>
 </html>
